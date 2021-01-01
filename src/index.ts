@@ -1,11 +1,18 @@
 import express from "express";
-let app :any = express();
+import "reflect-metadata";
+import {createConnection} from "typeorm";
 
-app.get("/", (req, res) => {
+//import {User} from "./entities/User"
+let app = express();
+//let user = new User();
+
+
+
+app.get("/", (_req, res) => {
   res.send("typescript nub");
 });
 
 
-app.listen(3000, () => {
-  console.log("http://localhost:3000/");
+createConnection().then(() => {
+  app.listen(3000,() => console.log("Server is running on localhost:3000"));
 });
