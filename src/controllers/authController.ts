@@ -35,10 +35,18 @@ export async function signup_post(req, res) {
   }
 }
 
-export async function login_post(req,res){
-    try{
-        const { username, password } = req.body;
-        
-
-    }
+export async function login_post(req, res) {
+  try {
+    const { username, password } = req.body;
+    const result = await user_repo.findOne({ username: username });
+    const token = createToken(result.user_id);
+    res.cookie("jwt", token, { maxAge: maxAge * 1000 });
+    res.status(200).json({ user: result.user_id });
+  } catch (err) {
+    console.log(err);
+  }
+}
+export function logout_get(_req, res) {
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.redirect("/");
 }
