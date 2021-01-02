@@ -7,6 +7,6 @@
     "database": "memeify",
     "synchronize":true,
     "logging": true,
-    "entities": ["dist/entities/*.js"],
+    "entities": ["src/entities/*.js","src/entities/*.ts"],
     "migrations": ["dist/migrations/*.js"]
  }
