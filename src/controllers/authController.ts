@@ -1,52 +1,77 @@
 import * as jwt from "jsonwebtoken";
-import { getRepository } from "typeorm";
+import { getRepository,Repository} from "typeorm";
 import { User } from "../entities/User";
+import { Request, Response } from "express";
 
-const user_repo = getRepository(User);
-const maxAge: number = 3 * 24 * 60 * 60;
-const createToken = (id) => {
-  return jwt.sign({ id }, process.env.jwt_key, {
-    expiresIn: maxAge,
-  });
-};
-export function login_get(_req, res) {
-  res.json("login get req sir");
-}
-export function signup_get(_req, res) {
-  res.json("signup get req sir");
-}
+//const jwt_key = process.env["jwt_key"]
+export class authController {
+  
 
-export async function signup_post(req, res) {
-  try {
-    const { username, email, FirstName, LastName, age, password } = req.body;
-    const user = user_repo.create({
-      username,
-      email,
-      FirstName,
-      LastName,
-      age,
-      password,
-    });
-    await user.save().then(() => {
-      res.json("record saved");
-    });
-  } catch (err) {
-    console.log(err);
+  user_repo:Repository<User>;
+  user_obj:User;
+  maxAge:number
+
+  constructor() {
+    this.user_repo = getRepository(User);
+    this.user_obj = new User();
+    this.maxAge =  3 * 24 * 60 * 60;
   }
-}
 
-export async function login_post(req, res) {
-  try {
-    const { username, password } = req.body;
-    const result = await user_repo.findOne({ username: username });
-    const token = createToken(result.user_id);
-    res.cookie("jwt", token, { maxAge: maxAge * 1000 });
-    res.status(200).json({ user: result.user_id });
-  } catch (err) {
-    console.log(err);
+  createToken = (id) => {
+    return jwt.sign({ id }, "manojpawarsj", {
+      expiresIn: this.maxAge,
+    });
+  };
+  login_get(_req: Request, res: Response) {
+    res.json("login get req sir");
   }
-}
-export function logout_get(_req, res) {
-  res.cookie("jwt", "", { maxAge: 1 });
-  res.redirect("/");
+  signup_get(_req: Request, res: Response) {
+    res.json("signup get req sir");
+  }
+
+  async signup_post(req: Request, res: Response) {
+    try {
+      const { username, email, FirstName, LastName, password, age } = req.body;
+      const user = this.user_repo.create({
+        username,
+        email,
+        FirstName,
+        LastName,
+        password,
+        age,
+      });
+      await user.save().then(() => {
+        res.json("record saved");
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async login_post(req: Request, res: Response) {
+    try {
+      const { username, password } = req.body;
+      const result = await this.user_repo.findOneOrFail({ username: username });
+      if (result) {
+        const chk_password: Promise<boolean> = this.user_obj.comparePassword(
+          password
+        );
+        if (chk_password) {
+          const token = this.createToken(result.user_id);
+          res.cookie("jwt", token, { maxAge: this.maxAge * 1000 });
+          res.status(200).json({ user: result.user_id });
+        } else {
+          throw Error("Invalid password");
+        }
+      } else {
+        throw Error("Invalid Username");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  logout_get(_req: Request, res: Response) {
+    res.cookie("jwt", "", { maxAge: 1 });
+    res.redirect("/");
+  }
 }

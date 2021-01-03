@@ -5,13 +5,12 @@ import {
   UpdateDateColumn,
   Column,
   BaseEntity,
-  BeforeInsert,
   Generated,
 } from "typeorm";
+
 import * as bcrypt from "bcrypt";
 @Entity()
 export class User extends BaseEntity {
-  
   @PrimaryGeneratedColumn("uuid")
   @Generated("uuid")
   user_id!: string;
@@ -19,15 +18,15 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   username!: string;
 
-  @Column({ unique: true , type: "varchar", length:100})
+  @Column({ unique: true, type: "varchar", length: 100 })
   email!: string;
 
-  @Column({type: "varchar"})
+  @Column({ type: "varchar" })
   FirstName!: string;
 
-  @Column({type: "varchar"})
+  @Column({ type: "varchar" })
   LastName!: string;
-  
+
   @Column()
   password!: string;
 
@@ -39,15 +38,13 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
   
-  
-  @BeforeInsert()
-  async  hashpasswords() {
+  async hashpasswords() {
     const salt = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(this.password,salt);
+    this.password = await bcrypt.hash(this.password, salt);
   }
-  async  comparePassword(attempt_password: string):Promise<boolean> {
+  async comparePassword(attempt_password: string): Promise<boolean> {
     return await bcrypt.compare(attempt_password, this.password);
   }
-
 }

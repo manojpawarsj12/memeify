@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import compression from "compression";
-import auth_router from "./routes/authroutes"
+import auth_router from "./routes/authroutes";
 const app = express();
 dotenv.config();
 app.use(cors());
