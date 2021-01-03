@@ -4,6 +4,8 @@ import { User } from "../entities/User";
 import { Request, Response } from "express";
 
 //const jwt_key = process.env["jwt_key"]
+
+
 export class authController {
   user_obj:User;
   maxAge:number
@@ -27,17 +29,19 @@ export class authController {
 
   async signup_post(req: Request, res: Response) {
     try {
-      const { username, email, FirstName, LastName, password, age } = req.body;
+      console.log(req.query)
+      let { username, email, password, age } = req.query;
+      username = username as  string;
+      console.log( username, email, password, age)
       const user_repo = getRepository(User);
       const user = user_repo.create({
         username,
         email,
-        FirstName,
-        LastName,
         password,
         age,
+        ...req.body
       });
-      await user.save().then(() => {
+      await user_repo.save(user).then(() => {
         res.json("record saved");
       });
     } catch (err) {

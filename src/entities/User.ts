@@ -21,11 +21,11 @@ export class User extends BaseEntity {
   @Column({ unique: true, type: "varchar", length: 100 })
   email!: string;
 
-  @Column({ type: "varchar" })
-  FirstName!: string;
+  // @Column({ type: "varchar" })
+  // FirstName!: string;
 
-  @Column({ type: "varchar" })
-  LastName!: string;
+  // @Column({ type: "varchar" })
+  // LastName!: string;
 
   @Column()
   password!: string;
