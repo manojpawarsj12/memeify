@@ -1,18 +1,14 @@
 import * as jwt from "jsonwebtoken";
-import { getRepository,Repository} from "typeorm";
+import { getRepository} from "typeorm";
 import { User } from "../entities/User";
 import { Request, Response } from "express";
 
 //const jwt_key = process.env["jwt_key"]
 export class authController {
-  
-
-  user_repo:Repository<User>;
   user_obj:User;
   maxAge:number
 
   constructor() {
-    this.user_repo = getRepository(User);
     this.user_obj = new User();
     this.maxAge =  3 * 24 * 60 * 60;
   }
@@ -32,7 +28,8 @@ export class authController {
   async signup_post(req: Request, res: Response) {
     try {
       const { username, email, FirstName, LastName, password, age } = req.body;
-      const user = this.user_repo.create({
+      const user_repo = getRepository(User);
+      const user = user_repo.create({
         username,
         email,
         FirstName,
@@ -51,7 +48,8 @@ export class authController {
   async login_post(req: Request, res: Response) {
     try {
       const { username, password } = req.body;
-      const result = await this.user_repo.findOneOrFail({ username: username });
+      const user_repo = getRepository(User);
+      const result = await user_repo.findOneOrFail({ username: username });
       if (result) {
         const chk_password: Promise<boolean> = this.user_obj.comparePassword(
           password
