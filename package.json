@@ -4,8 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+      "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
+      "build": "tsc",
+      "watch": "tsc -w",
+      "dev": "nodemon dist/index.js",
+      "start": "node dist/index.js",
+      "start2": "ts-node src/index.ts",
+      "dev2": "nodemon --exec ts-node src/index.ts"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/manojpawarsj12/memeify.git"
@@ -18,6 +24,19 @@
   },
   "homepage": "https://github.com/manojpawarsj12/memeify#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "helmet": "^4.3.1",
+    "ioredis": "^4.19.4",
+    "mongoose": "^5.11.10",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
     "@types/bcrypt": "^3.0.0",
     "@types/compression": "^1.7.0",
     "@types/cors": "^2.8.9",
@@ -27,13 +46,8 @@
     "@types/ioredis": "^4.17.10",
     "@types/mongoose": "^5.10.3",
     "@types/node": "^14.14.20",
-    "bcrypt": "^5.0.0",
-    "compression": "^1.7.4",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "express-session": "^1.17.1",
-    "helmet": "^4.3.1",
-    "ioredis": "^4.19.4",
-    "mongoose": "^5.11.10"
+    "@types/cookie-parser": "^1.4.2",
+    "@types/dotenv": "^8.2.0",
+    "@types/morgan": "^1.9.2"
   }
 }
