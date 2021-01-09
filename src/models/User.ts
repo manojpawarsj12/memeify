@@ -1,11 +1,12 @@
-import { Schema, model, Document} from "mongoose";
+import { Schema, model, Document } from "mongoose";
 import bcrypt from "bcrypt";
 
-interface UserDocument extends Document {
+export interface UserDocument extends Document {
   username: string;
   email: string;
   password: string;
   age: number;
+  matchesPassword: (password: string) => Promise<boolean>;
 }
 
 const UserSchema: Schema = new Schema(
@@ -40,3 +41,9 @@ UserSchema.pre<UserDocument>("save", async function (next) {
   next();
 });
 
+UserSchema.methods.matchesPassword = async function (
+  this: UserDocument,
+  password: string
+):Promise<boolean> {
+  return await bcrypt.compare(password, this.password);
+};

@@ -27,11 +27,10 @@ const memeify = async () => {
 
   mongoose.connect(MONGOURI, MONGO_OPTIONS).then(() => {
     app.listen(PORT, () => {
-      console.log('listening on port  ' +PORT);
+      console.log("listening on port  " + PORT);
     });
   });
 };
-
 
 memeify().catch((err) => {
   console.log(err);
