@@ -11,6 +11,6 @@ auth_routes.get("/", (req: Request, res: Response) => {
 auth_routes.post("/signup", authController.signup_post);
 // auth_routes.get('/login', authController.login_get);
 auth_routes.post('/login', authController.login_post);
-// auth_routes.get('/logout', authController.logout_get);
+auth_routes.get('/logout', authController.logOut);
 
 export default auth_routes;

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-
+import { SESSION_NAME } from "../config/session_config";
 import { User } from "../models/User";
 
 declare module "express-session" {
@@ -17,7 +17,6 @@ declare namespace Express {
 }
 export class Session_Auth {
   async signup_post(req: Request, res: Response) {
-    
     const { username, email, password } = req.query;
     const user = await User.create({
       username: username,
@@ -26,9 +25,10 @@ export class Session_Auth {
     });
     req.session.userId = user.id;
     req.session.createAt = Date.now();
+    console.log(req.session)
     res.json({
       message: "signup done",
-      user : user,
+      user: user,
     });
   }
   async login_post(req: Request, res: Response) {
@@ -41,7 +41,19 @@ export class Session_Auth {
     req.session.createAt = Date.now();
     res.json({
       message: "login done",
-      user : user,
+      user: user,
+    });
+  }
+  async logOut(req: Request, res: Response) {
+    req.session.destroy(function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+    res.clearCookie(SESSION_NAME);
+    res.json({
+      message: "logout done",
+      user: req.session,
     });
   }
 }

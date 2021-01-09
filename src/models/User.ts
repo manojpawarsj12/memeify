@@ -33,17 +33,18 @@ const UserSchema: Schema = new Schema(
   }
 );
 
-export const User = model<UserDocument>("User", UserSchema);
 
-UserSchema.pre<UserDocument>("save", async function (next) {
+
+UserSchema.pre<UserDocument>("save", async function () {
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 UserSchema.methods.matchesPassword = async function (
   this: UserDocument,
   password: string
-):Promise<boolean> {
+): Promise<boolean> {
   return await bcrypt.compare(password, this.password);
 };
+
+export const User = model<UserDocument>("User", UserSchema);
