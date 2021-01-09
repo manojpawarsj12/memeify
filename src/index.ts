@@ -4,15 +4,21 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import compression from "compression";
-//import path from "path";
-import { MONGOURI, PORT, MONGO_OPTIONS } from "./config/db";
+import Redis from "ioredis";
+import { MONGOURI, PORT, MONGO_OPTIONS, REDIS_OPTIONS } from "./config/db";
 import { SESSION_OPTIONS } from "./config/session_config";
 import auth_routes from "./routes/auth_routes";
 import morgan from "morgan";
-import session, { Store } from "express-session";
-var store: Store;
+import session from "express-session";
+import connectRedis from "connect-redis";
+
 const memeify = async () => {
   const app = express();
+  const RedisStore = connectRedis(session);
+  const redis = new Redis(REDIS_OPTIONS);
+  const store = new RedisStore({
+    client: redis,
+  });
   app.use(cors());
   app.use(morgan("dev"));
   app.use(express.json());
