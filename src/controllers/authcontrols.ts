@@ -16,7 +16,7 @@ declare namespace Express {
   }
 }
 export class Session_Auth {
-  async signup_post(req: Request, res: Response) {
+  async signup_post(req: Request, res: Response):Promise<void> {
     const { username, email, password } = req.query;
     const user = await User.create({
       username: username,
@@ -31,9 +31,9 @@ export class Session_Auth {
       user: user,
     });
   }
-  async login_post(req: Request, res: Response) {
-    const { username, password } = req.query;
-    const user = await User.findOne({ username: username, ...req.body });
+  async login_post(req: Request, res: Response):Promise<void> {
+    const { username, password } = req.query as any;
+    const user = await User.findOne({ username: username });
     if (!user || !(await user.matchesPassword(password))) {
       throw Error("Incorrect email or password");
     }
@@ -44,7 +44,7 @@ export class Session_Auth {
       user: user,
     });
   }
-  async logOut(req: Request, res: Response) {
+  logOut(req: Request, res: Response):void {
     req.session.destroy(function (err) {
       if (err) {
         console.log(err);
