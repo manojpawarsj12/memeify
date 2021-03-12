@@ -6,7 +6,9 @@ import {
   UpdateDateColumn,
   Column,
   BaseEntity,
+  OneToMany,
 } from "typeorm";
+import { Post } from "./Post";
 
 @ObjectType()
 @Entity()
@@ -28,6 +30,9 @@ export class User extends BaseEntity {
 
   @Column("bool", { default: false })
   confirmed!: boolean;
+
+  @OneToMany(() => Post, (post) => post.creator)
+  posts: Post[];
 
   @Field(() => String)
   @CreateDateColumn()
