@@ -1,43 +1,67 @@
+import "reflect-metadata";
 import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import helmet from "helmet";
-import compression from "compression";
+import { ApolloServer } from "apollo-server-express";
 import Redis from "ioredis";
-import { MONGOURI, PORT, MONGO_OPTIONS, REDIS_OPTIONS } from "./config/db";
-import { SESSION_OPTIONS } from "./config/session_config";
-import auth_routes from "./routes/auth_routes";
-import morgan from "morgan";
 import session from "express-session";
 import connectRedis from "connect-redis";
 
-const memeify = async () => {
+import cookieParser from "cookie-parser";
+import compression from "compression";
+import { REDIS_OPTIONS, typeorm_connection } from "./config/db_config";
+import { SESSION_OPTIONS } from "./config/session_config";
+import { createConnection } from "typeorm";
+import { buildSchema } from "type-graphql";
+import cors from "cors";
+import { RegisterUser } from "./resolvers/RegisterResolver";
+import { LoginUser } from "./resolvers/LoginResolver";
+
+const main = async () => {
   const app = express();
   const RedisStore = connectRedis(session);
   const redis = new Redis(REDIS_OPTIONS);
   const store = new RedisStore({
     client: redis,
   });
-  app.use(cors());
-  app.use(morgan("dev"));
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(session({ ...SESSION_OPTIONS, store }));
 
   app.use(cookieParser());
-  app.use(helmet());
-  app.use(session(SESSION_OPTIONS));
+  
   app.use(compression());
-  app.use(auth_routes);
-
-  mongoose.connect(MONGOURI, MONGO_OPTIONS).then(() => {
-    app.listen(PORT, () => {
-      console.log("listening on port  " + PORT);
-    });
+  app.use(
+    cors({
+      credentials: true,
+      origin: "http://localhost:4000"
+    })
+  );
+  
+  const schema = await buildSchema({
+    resolvers: [RegisterUser,LoginUser],
+    authChecker: ({ context: { req } }) => {
+      return !!req.session.userId;
+    },
   });
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req }: any) => ({ req }),
+  });
+  apolloServer.applyMiddleware({ app });
+  createConnection(typeorm_connection)
+    .then(() => {
+      console.log("database connected");
+      // here you can start to work with your entities
+      redis.connect(() => {
+        console.log("reddis connected");
+        app.listen(4000, () => {
+          console.log("3000");
+        });
+      });
+    })
+    .catch((error) => console.log(error));
 };
 
-memeify().catch((err) => {
+main().catch((err) => {
   console.log(err);
 });
