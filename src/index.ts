@@ -12,8 +12,6 @@ import { SESSION_OPTIONS } from "./config/session_config";
 import { createConnection } from "typeorm";
 import { buildSchema } from "type-graphql";
 import cors from "cors";
-import { RegisterUser } from "./resolvers/RegisterResolver";
-import { LoginUser } from "./resolvers/LoginResolver";
 
 const main = async () => {
   const app = express();
@@ -28,17 +26,17 @@ const main = async () => {
   app.use(session({ ...SESSION_OPTIONS, store }));
 
   app.use(cookieParser());
-  
+
   app.use(compression());
   app.use(
     cors({
       credentials: true,
-      origin: "http://localhost:4000"
+      origin: "http://localhost:4000",
     })
   );
-  
+
   const schema = await buildSchema({
-    resolvers: [RegisterUser,LoginUser],
+    resolvers: [__dirname + "/resolvers/*.ts"],
     authChecker: ({ context: { req } }) => {
       return !!req.session.userId;
     },

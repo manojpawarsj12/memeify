@@ -2,7 +2,8 @@ import argon2 from "argon2";
 import { User } from "../entities/User";
 import { RegisterInput } from "../inputs/RegisterInput";
 import { Resolver, Query, Mutation, Arg } from "type-graphql";
-
+import { sendEmail } from "../utils/SendEmail";
+import { createConfirmationUrl } from "../utils/CreateConfirmationEmailIUrl";
 @Resolver()
 export class RegisterUser {
   @Query(() => String)
@@ -21,7 +22,7 @@ export class RegisterUser {
       email,
       password: hashedPassword,
     }).save();
-
+    await sendEmail(email, await createConfirmationUrl(user.id));
     return user;
   }
 }

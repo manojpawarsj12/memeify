@@ -14,7 +14,7 @@ export class Post extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
- 
+
   @Field()
   @Column()
   userid!: number;

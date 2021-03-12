@@ -17,13 +17,15 @@ export class LoginUser {
     if (!user) {
       return null;
     }
-    const valid = await argon2.verify(user.password,password);
-    
+    const valid = await argon2.verify(user.password, password);
+
     if (!valid) {
       return null;
     }
-
-    ctx.req.session!.userId = user.id;
+    if (!user.confirmed) {
+      return null;
+    }
+    ctx.req.session.userId = user.id;
 
     return user;
   }
