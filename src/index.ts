@@ -36,7 +36,7 @@ const main = async () => {
   );
 
   const schema = await buildSchema({
-    resolvers: [__dirname + "/resolvers/*.ts"],
+    resolvers: [__dirname + "/resolvers/**/*.ts"],
     authChecker: ({ context: { req } }) => {
       return !!req.session.userId;
     },

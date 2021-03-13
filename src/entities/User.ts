@@ -31,6 +31,7 @@ export class User extends BaseEntity {
   @Column("bool", { default: false })
   confirmed!: boolean;
 
+  @Field(() => Post)
   @OneToMany(() => Post, (post) => post.creator)
   posts: Post[];
 

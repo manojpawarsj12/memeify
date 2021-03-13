@@ -1,8 +1,8 @@
-import { User } from "../entities/User";
+import { User } from "../../entities/User";
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
-import { ChangePasswordInput } from "../inputs/ChangePasswordInput";
-import { MyContext } from "../types/MyContext";
-import { redis } from "../types/redis";
+import { ChangePasswordInput } from "../../inputs/ChangePasswordInput";
+import { MyContext } from "../../types/MyContext";
+import { redis } from "../../types/redis";
 import argon2 from "argon2";
 
 Resolver();

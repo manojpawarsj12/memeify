@@ -16,5 +16,5 @@ export const typeorm_connection: ConnectionOptions = {
   synchronize: true,
   logging: true,
   entities: ["src/entities/*.*"],
-  migrations: ["src/migrations/*.js"],
+  migrations: ["src/migrations/*.*"],
 };

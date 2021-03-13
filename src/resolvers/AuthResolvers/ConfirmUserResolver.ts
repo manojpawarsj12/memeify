@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg } from "type-graphql";
 
-import { User } from "../entities/User";
-import { redis } from "../types/redis";
+import { User } from "../../entities/User";
+import { redis } from "../../types/redis";
 @Resolver()
 export class ConfirmUser {
   @Mutation(() => Boolean)

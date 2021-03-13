@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Ctx } from "type-graphql";
 
-import { User } from "../entities/User";
-import { MyContext } from "../types/MyContext";
+import { User } from "../../entities/User";
+import { MyContext } from "../../types/MyContext";
 import argon2 from "argon2";
 
 @Resolver()
@@ -15,15 +15,15 @@ export class LoginUser {
     const user = await User.findOne({ where: { email } });
 
     if (!user) {
-      return null;
+      throw new Error("user doesnot exist");
     }
     const valid = await argon2.verify(user.password, password);
 
     if (!valid) {
-      return null;
+      throw new Error("incorrect username or password");
     }
     if (!user.confirmed) {
-      return null;
+      throw new Error("user hasn't confirmed");
     }
     ctx.req.session.userId = user.id;
 
