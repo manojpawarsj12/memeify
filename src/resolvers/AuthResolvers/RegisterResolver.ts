@@ -26,8 +26,8 @@ export class RegisterUser {
       await sendEmail(email, await createConfirmationUrl(user.id));
       return user;
     } catch (err) {
-      console.log(err.message);
-      throw Error(err.message);
+      //console.log(err.message);
+      throw new Error("username or email already taken");
     }
   }
 }
