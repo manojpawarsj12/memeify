@@ -16,5 +16,9 @@ export const typeorm_connection: ConnectionOptions = {
   synchronize: true,
   logging: true,
   entities: ["src/entities/*.*"],
+  migrationsTableName: "custom_migration_table",
   migrations: ["src/migrations/*.*"],
+  cli: {
+    migrationsDir: "src/migrations/migration",
+  },
 };

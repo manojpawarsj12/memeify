@@ -1,11 +1,18 @@
 import { Post } from "../../entities/Post";
-import { Arg, Resolver, Mutation, Ctx, Int, UseMiddleware } from "type-graphql";
+import {
+  Arg,
+  Resolver,
+  Mutation,
+  Ctx,
+  Int,
+  UseMiddleware,
+  Query,
+} from "type-graphql";
 import { CreatePostInput } from "../../inputs/CreatePostInput";
 import { MyContext } from "../../types/MyContext";
 import { UpdatePostInput } from "../../inputs/UpdatePostInput";
 import { getConnection } from "typeorm";
 import { isAuth } from "../../middlewares/IsAuth";
-
 @Resolver()
 export class CreatePost {
   @Mutation(() => Post, { nullable: true })
@@ -49,5 +56,21 @@ export class CreatePost {
       .execute();
 
     return result.raw[0];
+  }
+
+  @Query(() => [Post])
+  @UseMiddleware(isAuth)
+  async GetCurrentUserPost(
+    @Arg("userId", () => Int) id: number,
+    @Ctx() ctx: MyContext
+  ): Promise<Post[]> {
+    console.log(id);
+    const post = await getConnection()
+      .getRepository(Post)
+      .createQueryBuilder("post")
+      .where('"creatorId" = :creatorId', { creatorId: ctx.req.session.userId })
+      .orderBy('"createdAt"', "ASC")
+      .getMany();
+    return post;
   }
 }

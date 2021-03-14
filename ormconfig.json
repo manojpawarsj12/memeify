@@ -1,0 +1,15 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5433,
+  "database": "memeify",
+  "username": "postgres",
+  "password": "xlmrsj0090",
+  "synchronize": true,
+  "logging": true,
+  "entities": ["src/entities/*.*"],
+  "migrations": ["src/migrations/*.*"],
+  "cli": {
+    "migrationsDir": "src/migrations/migration"
+  }
+}
