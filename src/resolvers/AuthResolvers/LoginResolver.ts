@@ -26,7 +26,7 @@ export class LoginUser {
       throw new Error("user hasn't confirmed");
     }
     ctx.req.session.userId = user.id;
-
+    console.log(user);
     return user;
   }
 }

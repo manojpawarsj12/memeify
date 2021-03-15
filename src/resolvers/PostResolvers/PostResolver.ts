@@ -13,6 +13,7 @@ import { MyContext } from "../../types/MyContext";
 import { UpdatePostInput } from "../../inputs/UpdatePostInput";
 import { getConnection } from "typeorm";
 import { isAuth } from "../../middlewares/IsAuth";
+import { User } from "../../entities/User";
 @Resolver()
 export class CreatePost {
   @Mutation(() => Post, { nullable: true })
@@ -23,7 +24,12 @@ export class CreatePost {
     @Ctx() ctx: MyContext
   ): Promise<Post | null> {
     const creatorId = parseInt(ctx.req.session.userId, 10);
-    const post = await Post.create({ post_text, creatorId }).save();
+    const user = await User.findOne(creatorId);
+    const post = await Post.create({
+      post_text,
+      creator: user,
+      creatorId,
+    }).save();
     return post;
   }
   @Mutation(() => Boolean)
@@ -60,7 +66,7 @@ export class CreatePost {
 
   @Query(() => [Post])
   @UseMiddleware(isAuth)
-  async GetCurrentUserPost(
+  async GetCurrentUserPostNoRelation(
     @Arg("userId", () => Int) id: number,
     @Ctx() ctx: MyContext
   ): Promise<Post[]> {
@@ -71,6 +77,20 @@ export class CreatePost {
       .where('"creatorId" = :creatorId', { creatorId: ctx.req.session.userId })
       .orderBy('"createdAt"', "ASC")
       .getMany();
+    return post;
+  }
+  @Query(() => [Post])
+  @UseMiddleware(isAuth)
+  async GetCurrentUserPost(
+    @Arg("userId", () => Int) id: number,
+    @Ctx() ctx: MyContext
+  ): Promise<Post[]> {
+    console.log(id);
+    const post = await Post.find({
+      where: { creatorId: ctx.req.session.userId },
+      relations: ["creator"],
+      order: { createdAt: "ASC" },
+    });
     return post;
   }
 }
