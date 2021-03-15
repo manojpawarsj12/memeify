@@ -11,7 +11,7 @@ import {
 import { Post } from "./Post";
 
 @ObjectType()
-@Entity()
+@Entity("users")
 export class User extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
