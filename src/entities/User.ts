@@ -8,6 +8,7 @@ import {
   BaseEntity,
   OneToMany,
 } from "typeorm";
+import { Friendship } from "./Friendship";
 import { Post } from "./Post";
 
 @ObjectType()
@@ -34,6 +35,14 @@ export class User extends BaseEntity {
   @Field(() => Post)
   @OneToMany(() => Post, (post) => post.creator)
   posts: Post[];
+
+  @Field(() => Friendship)
+  @OneToMany(() => Friendship, (friends) => friends.friends)
+  friends: Friendship[];
+
+  @Field(() => Friendship)
+  @OneToMany(() => Friendship, (friends) => friends.friendrequest)
+  friendrequest: Friendship[];
 
   @Field(() => String)
   @CreateDateColumn()
