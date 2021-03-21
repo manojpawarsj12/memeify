@@ -43,7 +43,8 @@ const main = async () => {
   });
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req }: any) => ({ req }),
+    context: ({ req, res }) => ({ req, res }),
+    tracing: true,
   });
   apolloServer.applyMiddleware({ app });
   createConnection(typeorm_connection)

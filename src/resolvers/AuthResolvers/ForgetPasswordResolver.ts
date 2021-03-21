@@ -16,7 +16,7 @@ export class ForgotPasswordResolver {
     }
 
     const token = v4();
-    await redis.set(token, user.id, "ex", 60 * 60 * 24); // 1 day expiration
+    await redis.set(token, user.userId, "ex", 60 * 60 * 24); // 1 day expiration
 
     await sendEmail(
       email,

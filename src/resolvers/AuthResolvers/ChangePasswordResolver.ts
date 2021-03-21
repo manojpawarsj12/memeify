@@ -27,7 +27,7 @@ export class ChangePassword {
 
     await user.save();
 
-    ctx.req.session.userId = user.id;
+    ctx.req.session.userId = user.userId;
 
     return user;
   }

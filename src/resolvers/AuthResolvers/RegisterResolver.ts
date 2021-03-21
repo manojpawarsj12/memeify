@@ -23,7 +23,7 @@ export class RegisterUser {
         email,
         password: hashedPassword,
       }).save();
-      await sendEmail(email, await createConfirmationUrl(user.id));
+      await sendEmail(email, await createConfirmationUrl(user.userId));
       return user;
     } catch (err) {
       //console.log(err.message);

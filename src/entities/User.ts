@@ -8,7 +8,7 @@ import {
   BaseEntity,
   OneToMany,
 } from "typeorm";
-import { Friendship } from "./Friendship";
+import { Friends } from "./Friends";
 import { Post } from "./Post";
 
 @ObjectType()
@@ -16,7 +16,7 @@ import { Post } from "./Post";
 export class User extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
-  id!: number;
+  userId!: number;
 
   @Field()
   @Column({ unique: true })
@@ -36,13 +36,13 @@ export class User extends BaseEntity {
   @OneToMany(() => Post, (post) => post.creator)
   posts: Post[];
 
-  @Field(() => Friendship)
-  @OneToMany(() => Friendship, (friends) => friends.friends)
-  friends: Friendship[];
+  @Field(() => Friends)
+  @OneToMany(() => Friends, (friendStatus) => friendStatus.fromUser)
+  sentRequests: Friends[];
 
-  @Field(() => Friendship)
-  @OneToMany(() => Friendship, (friends) => friends.friendrequest)
-  friendrequest: Friendship[];
+  @Field(() => Friends)
+  @OneToMany(() => Friends, (friendStatus) => friendStatus.fromUser)
+  receivedRequests: Friends[];
 
   @Field(() => String)
   @CreateDateColumn()

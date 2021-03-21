@@ -39,7 +39,7 @@ export class CreatePost {
     @Ctx() ctx: MyContext
   ): Promise<boolean | null> {
     const creatorId = parseInt(ctx.req.session.userId, 10);
-    await Post.delete({ id, creatorId });
+    await Post.delete({ postId: id, creatorId });
     return true;
   }
 
@@ -66,11 +66,7 @@ export class CreatePost {
 
   @Query(() => [Post])
   @UseMiddleware(isAuth)
-  async GetCurrentUserPostNoRelation(
-    @Arg("userId", () => Int) id: number,
-    @Ctx() ctx: MyContext
-  ): Promise<Post[]> {
-    console.log(id);
+  async GetCurrentUserPostNoRelation(@Ctx() ctx: MyContext): Promise<Post[]> {
     const post = await getConnection()
       .getRepository(Post)
       .createQueryBuilder("post")
@@ -81,16 +77,13 @@ export class CreatePost {
   }
   @Query(() => [Post])
   @UseMiddleware(isAuth)
-  async GetCurrentUserPost(
-    @Arg("userId", () => Int) id: number,
-    @Ctx() ctx: MyContext
-  ): Promise<Post[]> {
-    console.log(id);
+  async GetCurrentUserPost(@Ctx() ctx: MyContext): Promise<Post[]> {
     const post = await Post.find({
       where: { creatorId: ctx.req.session.userId },
       relations: ["creator"],
       order: { createdAt: "ASC" },
     });
+
     return post;
   }
 }

@@ -12,7 +12,7 @@ export class ConfirmUser {
       return false;
     }
 
-    await User.update({ id: parseInt(userId, 10) }, { confirmed: true });
+    await User.update({ userId: parseInt(userId, 10) }, { confirmed: true });
     await redis.del(token);
 
     return true;
