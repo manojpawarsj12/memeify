@@ -15,6 +15,4 @@ export const IsUserExist: MiddlewareFn<MyContext> = async (
   } else {
     throw new Error("user doesnot exist");
   }
-
-  return next();
 };

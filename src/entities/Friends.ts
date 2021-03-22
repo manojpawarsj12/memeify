@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ID, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -16,15 +16,15 @@ export enum Status {
 @ObjectType()
 @Entity("friends")
 export class Friends extends BaseEntity {
-  @Field()
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   friendId!: number;
 
-  @Field()
+  @Field(() => Int)
   @Column({ unique: true })
   fromUserId: number;
 
-  @Field()
+  @Field(() => Int)
   @Column({ unique: true })
   toUserId: number;
 
@@ -34,15 +34,11 @@ export class Friends extends BaseEntity {
 
   @Unique(["userId"])
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.sentRequests, {
-    cascade: ["insert", "update"],
-  })
+  @ManyToOne(() => User, (user) => user.sentRequests)
   fromUser: User;
 
   @Unique(["userId"])
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.receivedRequests, {
-    cascade: true,
-  })
+  @ManyToOne(() => User, (user) => user.receivedRequests)
   toUser: User;
 }

@@ -1,4 +1,4 @@
-import { ObjectType, Field } from "type-graphql";
+import { ObjectType, Field, ID } from "type-graphql";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -14,7 +14,7 @@ import { Post } from "./Post";
 @ObjectType()
 @Entity("users")
 export class User extends BaseEntity {
-  @Field()
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   userId!: number;
 
@@ -41,14 +41,14 @@ export class User extends BaseEntity {
   sentRequests: Friends[];
 
   @Field(() => Friends)
-  @OneToMany(() => Friends, (friendStatus) => friendStatus.fromUser)
+  @OneToMany(() => Friends, (friendStatus) => friendStatus.toUser)
   receivedRequests: Friends[];
 
-  @Field(() => String)
+  @Field()
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field(() => String)
+  @Field()
   @UpdateDateColumn()
   updatedAt: Date;
 }

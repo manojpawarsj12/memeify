@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ID, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -13,7 +13,7 @@ import { User } from "./User";
 @ObjectType()
 @Entity("posts")
 export class Post extends BaseEntity {
-  @Field()
+  @Field(() => ID)
   @PrimaryGeneratedColumn()
   postId!: number;
 
@@ -21,11 +21,11 @@ export class Post extends BaseEntity {
   @ManyToOne(() => User, (user) => user.posts)
   creator!: User;
 
-  @Field()
+  @Field(() => Int)
   @Column()
   creatorId: number;
 
-  @Field()
+  @Field(() => Int)
   @Column({ type: "int", default: 0 })
   likes!: number;
 
@@ -33,11 +33,11 @@ export class Post extends BaseEntity {
   @Column()
   post_text!: string;
 
-  @Field(() => String)
+  @Field()
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field(() => String)
+  @Field()
   @UpdateDateColumn()
   updatedAt: Date;
 }
