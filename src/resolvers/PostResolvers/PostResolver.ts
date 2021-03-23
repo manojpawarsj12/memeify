@@ -29,7 +29,11 @@ export class CreatePost {
       post_text,
       creator: user,
       creatorId,
-    }).save();
+    })
+      .save()
+      .catch((err) => {
+        throw new Error(err.message);
+      });
     return post;
   }
   @Mutation(() => Boolean)
@@ -39,7 +43,9 @@ export class CreatePost {
     @Ctx() ctx: MyContext
   ): Promise<boolean | null> {
     const creatorId = parseInt(ctx.req.session.userId, 10);
-    await Post.delete({ postId: id, creatorId });
+    await Post.delete({ postId: id, creatorId }).catch((err) => {
+      throw new Error(err.message);
+    });
     return true;
   }
 

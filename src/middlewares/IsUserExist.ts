@@ -9,10 +9,10 @@ export const IsUserExist: MiddlewareFn<MyContext> = async (
   if (!context.req.session.userId) {
     throw new Error("not authenticated");
   }
-  const user = await User.findOne({ userId: context.req.session.userId });
+  const user = await User.findOne(context.req.session.userId);
   if (user) {
     return next();
   } else {
-    throw new Error("user doesnot exist");
+    throw new Error("user doesn't exist");
   }
 };

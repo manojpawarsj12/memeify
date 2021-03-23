@@ -15,19 +15,18 @@ export class RegisterUser {
     @Arg("data")
     { username, email, password }: RegisterInput
   ): Promise<User> {
-    try {
-      const hashedPassword = await argon2.hash(password);
+    const hashedPassword = await argon2.hash(password);
 
-      const user = await User.create({
-        username,
-        email,
-        password: hashedPassword,
-      }).save();
-      await sendEmail(email, await createConfirmationUrl(user.userId));
-      return user;
-    } catch (err) {
-      //console.log(err.message);
-      throw new Error("username or email already taken");
-    }
+    const user = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+    })
+      .save()
+      .catch((err) => {
+        throw new Error(err.message);
+      });
+    await sendEmail(email, await createConfirmationUrl(user.userId));
+    return user;
   }
 }
