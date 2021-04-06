@@ -13,8 +13,8 @@ import {
   CreateCommentInput,
   UpdateCommentInput,
 } from "../../inputs/CommentInput";
-import { Post } from "src/entities/Post";
-import { User } from "src/entities/User";
+import { Post } from "../../entities/Post";
+import { User } from "../../entities/User";
 import { getConnection } from "typeorm";
 
 @Resolver()
@@ -67,10 +67,7 @@ export class CommentsResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
-  async DeleteComment(
-    @Arg("commentId") commentId: number,
-    @Ctx() ctx: MyContext
-  ): Promise<Boolean> {
+  async DeleteComment(@Arg("commentId") commentId: number): Promise<Boolean> {
     const comment = await Comments.findOne(commentId);
     if (comment) {
       await Comments.delete(comment);

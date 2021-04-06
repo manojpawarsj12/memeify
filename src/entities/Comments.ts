@@ -27,16 +27,16 @@ export class Comments extends BaseEntity {
   @Column()
   postId: number;
 
-  @Field(() => ID)
+  @Field()
   @Column()
   comment_text: string;
 
-  @Field()
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.userId)
   @JoinColumn()
   user: User;
 
-  @Field()
+  @Field(() => Post)
   @ManyToOne(() => Post, (post) => post.comments, { onDelete: "CASCADE" })
   @JoinColumn()
   posts: Post;
