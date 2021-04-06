@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Comments } from "./Comments";
 import { User } from "./User";
 
 @ObjectType()
@@ -15,11 +17,7 @@ import { User } from "./User";
 export class Post extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  postId!: number;
-
-  @Field(() => User)
-  @ManyToOne(() => User, (user) => user.posts)
-  creator!: User;
+  postId: number;
 
   @Field(() => Int)
   @Column()
@@ -27,11 +25,19 @@ export class Post extends BaseEntity {
 
   @Field(() => Int)
   @Column({ type: "int", default: 0 })
-  likes!: number;
+  likes: number;
 
   @Field()
   @Column()
-  post_text!: string;
+  post_text: string;
+
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.posts)
+  creator: User;
+
+  @Field(() => User)
+  @OneToMany(() => Comments, (comments) => comments.posts)
+  comments: Comments[];
 
   @Field()
   @CreateDateColumn()

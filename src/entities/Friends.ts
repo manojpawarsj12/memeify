@@ -18,7 +18,7 @@ export enum Status {
 export class Friends extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  friendId!: number;
+  friendId: number;
 
   @Field(() => Int)
   @Column({ unique: true })

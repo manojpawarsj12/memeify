@@ -8,9 +8,8 @@ import {
   UseMiddleware,
   Query,
 } from "type-graphql";
-import { CreatePostInput } from "../../inputs/CreatePostInput";
+import { CreatePostInput, UpdatePostInput } from "../../inputs/PostInput";
 import { MyContext } from "../../types/MyContext";
-import { UpdatePostInput } from "../../inputs/UpdatePostInput";
 import { getConnection } from "typeorm";
 import { isAuth } from "../../middlewares/IsAuth";
 import { User } from "../../entities/User";
@@ -60,7 +59,7 @@ export class CreatePost {
       .createQueryBuilder()
       .update(Post)
       .set({ post_text: post_text })
-      .where('id = :id and "creatorId" = :creatorId', {
+      .where('postId = :id and "creatorId" = :creatorId', {
         id,
         creatorId: ctx.req.session.userId,
       })

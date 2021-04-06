@@ -16,21 +16,21 @@ import { Post } from "./Post";
 export class User extends BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
-  userId!: number;
+  userId: number;
 
   @Field()
   @Column({ unique: true })
-  username!: string;
+  username: string;
 
   @Field()
   @Column({ unique: true })
-  email!: string;
+  email: string;
 
   @Column()
   password!: string;
 
   @Column("bool", { default: false })
-  confirmed!: boolean;
+  confirmed: boolean;
 
   @Field(() => Post)
   @OneToMany(() => Post, (post) => post.creator)
