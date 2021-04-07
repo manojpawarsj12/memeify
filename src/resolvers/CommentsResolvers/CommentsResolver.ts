@@ -94,8 +94,10 @@ export class CommentsResolver {
         })
         .returning("*")
         .execute();
-
-      return comment.raw[0];
+      if (comment) {
+        return comment.raw[0];
+      }
+      return null;
     }
     return null;
   }
