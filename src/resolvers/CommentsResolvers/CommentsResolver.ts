@@ -11,6 +11,7 @@ import { isAuth } from "../../middlewares/IsAuth";
 import { MyContext } from "../../types/MyContext";
 import {
   CreateCommentInput,
+  ReplyCommentInput,
   UpdateCommentInput,
 } from "../../inputs/CommentInput";
 import { Post } from "../../entities/Post";
@@ -98,6 +99,34 @@ export class CommentsResolver {
         return comment.raw[0];
       }
       return null;
+    }
+    return null;
+  }
+
+  @Mutation(() => Comments, { nullable: true })
+  @UseMiddleware(isAuth)
+  async CreateReplyComment(
+    @Arg("data")
+    { postId, commentId, comment_text }: ReplyCommentInput,
+    @Ctx() ctx: MyContext
+  ): Promise<Comments | null> {
+    const comment = await Comments.findOne(commentId);
+    const post = await Post.findOne(postId);
+    const user = await User.findOne(ctx.req.session.userId);
+    if (comment) {
+      const replycomment = await Comments.create({
+        userId: ctx.req.session.userId,
+        postId: post?.postId,
+        comment_text: comment_text,
+        user: user,
+        posts: post,
+      })
+        .save()
+        .catch((err) => {
+          throw new Error(err.message);
+        });
+      comment.comment_replies.push(replycomment);
+      return comment;
     }
     return null;
   }

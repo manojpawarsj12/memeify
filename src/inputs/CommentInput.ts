@@ -17,3 +17,15 @@ export class UpdateCommentInput {
   @Field()
   comment_text: string;
 }
+
+@InputType()
+export class ReplyCommentInput {
+  @Field()
+  postId: number;
+
+  @Field()
+  commentId: number;
+
+  @Field()
+  comment_text: string;
+}

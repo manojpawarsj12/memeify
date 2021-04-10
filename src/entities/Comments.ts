@@ -41,6 +41,10 @@ export class Comments extends BaseEntity {
   @JoinColumn()
   posts: Post;
 
+  @Field(() => Comments)
+  @Column("simple-array", { nullable: true, default: null })
+  comment_replies!: Comments[];
+
   @Field()
   @CreateDateColumn()
   createdAt: Date;
