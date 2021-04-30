@@ -126,12 +126,10 @@ export class CommentsResolver {
         .catch((err) => {
           throw new Error(err.message);
         });
-      const hehe = await CommentReplies.create({
+      await CommentReplies.create({
         PC: comment,
         CC: RepliedComment,
       }).save();
-
-      console.log(hehe);
 
       return comment;
     }
