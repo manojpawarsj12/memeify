@@ -17,6 +17,7 @@ import {
 import { Post } from "../../entities/Post";
 import { User } from "../../entities/User";
 import { getConnection } from "typeorm";
+import { CommentReplies } from "../../entities/CommentReplies";
 
 @Resolver()
 export class CommentsResolver {
@@ -113,10 +114,10 @@ export class CommentsResolver {
     const comment = await Comments.findOne(commentId);
     const post = await Post.findOne(postId);
     const user = await User.findOne(ctx.req.session.userId);
-    if (comment) {
-      const replycomment = await Comments.create({
+    if (comment && post) {
+      const RepliedComment = await Comments.create({
         userId: ctx.req.session.userId,
-        postId: post?.postId,
+        postId: post.postId,
         comment_text: comment_text,
         user: user,
         posts: post,
@@ -125,7 +126,13 @@ export class CommentsResolver {
         .catch((err) => {
           throw new Error(err.message);
         });
-      comment.comment_replies.push(replycomment);
+      const hehe = await CommentReplies.create({
+        PC: comment,
+        CC: RepliedComment,
+      }).save();
+
+      console.log(hehe);
+
       return comment;
     }
     return null;

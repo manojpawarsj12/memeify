@@ -8,7 +8,9 @@ import {
   BaseEntity,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
+import { CommentReplies } from "./CommentReplies";
 import { Post } from "./Post";
 import { User } from "./User";
 
@@ -32,7 +34,9 @@ export class Comments extends BaseEntity {
   comment_text: string;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.userId)
+  @ManyToOne(() => User, (user) => user.userId, {
+    cascade: true,
+  })
   @JoinColumn()
   user: User;
 
@@ -41,9 +45,13 @@ export class Comments extends BaseEntity {
   @JoinColumn()
   posts: Post;
 
-  @Field(() => Comments)
-  @Column("simple-array", { nullable: true, default: null })
-  comment_replies!: Comments[];
+  @Field(() => CommentReplies)
+  @OneToMany(() => CommentReplies, (commentreplies) => commentreplies.PC)
+  ParentComment: CommentReplies;
+
+  @Field(() => CommentReplies)
+  @OneToMany(() => CommentReplies, (commentreplies) => commentreplies.CC)
+  ChildComment: CommentReplies;
 
   @Field()
   @CreateDateColumn()
