@@ -57,9 +57,10 @@ export class CommentsResolver {
       const comments = await Comments.find({
         where: { postId: post.postId, userId: ctx.req.session.userId },
         order: { createdAt: "ASC" },
-        relations: ["user"],
+        relations: ["user", "ParentComment", "ChildComment"],
       });
       if (comments) {
+        console.log(comments[0].ParentComment);
         return comments;
       }
       return null;
