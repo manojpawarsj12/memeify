@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Comments } from "../../entities/Comments";
 import {
   Arg,
@@ -17,7 +16,6 @@ import {
 import { Post } from "../../entities/Post";
 import { User } from "../../entities/User";
 import { getConnection } from "typeorm";
-
 
 @Resolver()
 export class CommentsResolver {
@@ -60,7 +58,6 @@ export class CommentsResolver {
         relations: ["user"],
       });
       if (comments) {
-        
         return comments;
       }
       return null;
@@ -104,5 +101,4 @@ export class CommentsResolver {
     }
     return null;
   }
-
 }

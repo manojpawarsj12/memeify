@@ -12,7 +12,7 @@
     "start2": "ts-node src/index.ts",
     "dev2": "ts-node-dev --respawn src/index.ts",
     "db:setup": "ts-node tests/utils/setup.ts",
-    "test": "npm run db:setup && jest"
+    "test": "npm run db:setup && jest "
   },
   "keywords": [],
   "author": "",

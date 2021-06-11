@@ -12,7 +12,7 @@ export const testConn = () => {
 
     dropSchema: true,
 
-    entities: [__dirname + "....src/entities/*.*"],
+    entities: ["src/entities/*.*"],
     migrationsTableName: "custom_migration_table",
     migrations: ["src/migrations/*.*"],
     cli: {

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Field, InputType } from "type-graphql";
 
 @InputType()
@@ -18,6 +17,3 @@ export class UpdateCommentInput {
   @Field()
   comment_text: string;
 }
-
-
-

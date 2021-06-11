@@ -1,9 +1,9 @@
 import argon2 from "argon2";
 import { User } from "../../entities/User";
-import { RegisterInput } from "../../inputs/RegisterInput";
+import { RegisterInput } from "../../inputs/AuthInput";
 import { Resolver, Mutation, Arg } from "type-graphql";
-import { sendEmail } from "../../utils/SendEmail";
-import { createConfirmationUrl } from "../../utils/CreateConfirmationEmailIUrl";
+//import { sendEmail } from "../../utils/SendEmail";
+//import { createConfirmationUrl } from "../../utils/CreateConfirmationEmailIUrl";
 @Resolver()
 export class RegisterUser {
   @Mutation(() => User)
@@ -17,12 +17,13 @@ export class RegisterUser {
       username,
       email,
       password: hashedPassword,
+      confirmed: true,
     })
       .save()
       .catch((err) => {
         throw new Error(err.message);
       });
-    await sendEmail(email, await createConfirmationUrl(user.userId));
+    //await sendEmail(email, await createConfirmationUrl(user.userId));
     return user;
   }
 }

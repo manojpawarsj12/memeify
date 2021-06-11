@@ -4,13 +4,14 @@ import { User } from "../../entities/User";
 import { MyContext } from "../../types/MyContext";
 import argon2 from "argon2";
 import { UserResponse } from "../../errorhandler/AuthErrorResolver";
+import { LoginInput } from "../../inputs/AuthInput";
 
 @Resolver()
 export class LoginUser {
   @Mutation(() => UserResponse)
   async login(
-    @Arg("email") email: string,
-    @Arg("password") password: string,
+    @Arg("data")
+    {  email, password }: LoginInput,
     @Ctx() ctx: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne({ where: { email } });
