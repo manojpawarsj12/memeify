@@ -54,7 +54,7 @@ const main = async () => {
       redis.connect(() => {
         console.log("reddis connected");
         app.listen(4000, () => {
-          console.log("3000");
+          console.log("4000");
         });
       });
     })

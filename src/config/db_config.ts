@@ -9,10 +9,10 @@ export const REDIS_OPTIONS: RedisOptions = {
 export const typeorm_connection: ConnectionOptions = {
   type: "postgres",
   host: "localhost",
-  port: 5433,
+  port: 5432,
   database: "memeify",
   username: "postgres",
-  password: "xlmrsj0090",
+  password: "manoj",
   synchronize: true,
   logging: true,
   entities: ["src/entities/*.*"],
