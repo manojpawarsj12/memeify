@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import "reflect-metadata";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
@@ -64,3 +65,4 @@ const main = async () => {
 main().catch((err) => {
   console.log(err);
 });
+
